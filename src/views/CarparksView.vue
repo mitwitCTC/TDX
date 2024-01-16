@@ -1,5 +1,6 @@
 <template>
   <div class="container d-flex row">
+    <NavBar></NavBar>
     <div class="sideBar col-4">
       <div class="d-flex align-items-start">
         <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
@@ -32,6 +33,7 @@
 <script>
 import { RouterLink, RouterView } from 'vue-router';
 import router from '../router';
+import NavBar from '../components/NavBar.vue';
 import CarParkList from '../views/CarParks/CarParkList.vue';
 import ParkingSpaceList from '../views/CarParks/ParkingSpaceList.vue';
 import ParkingServiceTimeList from '../views/CarParks/ParkingServiceTimeList.vue';
@@ -46,6 +48,7 @@ export default {
   components: {
     RouterView,
     RouterLink,
+    NavBar,
     CarParkList,
     ParkingSpaceList,
     ParkingServiceTimeList

@@ -1,6 +1,6 @@
 <script>
 import { RouterLink, RouterView } from 'vue-router';
-import router from '../router';
+// import router from '../router';
 export default {
   components: {
     RouterView,
@@ -10,8 +10,8 @@ export default {
 </script>
 
 <template>
-  登入畫面
-  <router-link to="stations">場站列表</router-link>
+  <h1>場站列表</h1>
+  <router-link :to="'/carParks'">carParks</router-link>
 </template>
 
 <style></style>

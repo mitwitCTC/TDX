@@ -1,17 +1,8 @@
 <template>
-    <div class="d-flex justify-content-around my-3 sticky-top">
+    <div class="d-flex justify-content-around my-3 ">
         <h1 class="text-center">新北市 TDX上傳平台</h1>
     </div>
     <div class="container">
-        <div class="form-floating">
-            <select class="form-select" id="stationList" v-model="stationId">
-                <option selected disabled>請選擇場站名稱</option>
-                <option :value="station.stationId" v-for="station in stationList">
-                    {{ station.stationName }}
-                </option>
-            </select>
-            <label for="stationList">請選擇場站名稱</label>
-        </div>
         <ul class="nav nav-tabs my-2" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
                 <router-link to="carParks" class="td-n">
