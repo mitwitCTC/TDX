@@ -1,1006 +1,1022 @@
 <template>
-    <VForm v-slot="{ meta, handleSubmit }" @submit="sendCarParkList()">
-        <div class="mb-3 d-flex flex-column">
-            <label for="CarParkID" class="form-label">
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                業管機關訂定之停車場代碼
-                <span class="text-danger">*</span>
-            </label>
-            <div id="CarParkIDHelp" class="form-text">
-                <p>該停車場代表編號<br>
-                    <span>
-                        ※如果為私有停車場自行提供的停車場資料，CarParkID 代碼編碼方式，建議如下：<br>
-                        <span class="text-danger">"公司統一編號" + "-"+ {3碼流水號}</span><br>
-                        主要是為了避免與各業管機關上傳之停車場代碼重複。<br>
-                        例：28412550-001
-                    </span>
-                </p>
+    <div class="container">
+        <h1 class="pt-3 text-center">{{ mode == 'create' ? '新增' : '編輯' }}路外停車場基本資料</h1>
+        <VForm v-slot="{ meta, handleSubmit }">
+            <div class="mb-3 d-flex flex-column">
+                <label for="CarParkID" class="form-label">
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
+                    業管機關訂定之停車場代碼
+                    <span class="text-danger">*</span>
+                </label>
+                <div id="CarParkIDHelp" class="form-text">
+                    <p>該停車場代表編號<br>
+                        <span>
+                            ※如果為私有停車場自行提供的停車場資料，CarParkID 代碼編碼方式，建議如下：<br>
+                            <span class="text-danger">"公司統一編號" + "-"+ {3碼流水號}</span><br>
+                            主要是為了避免與各業管機關上傳之停車場代碼重複。<br>
+                            例：28412550-001
+                        </span>
+                    </p>
+                </div>
+                <VField name="停車場代碼" id="CarParkID" v-model="CarParkList.CarParkID" type="text" rules="required" />
+                <ErrorMessage class="text-danger" name="停車場代碼" />
             </div>
-            <VField name="停車場代碼" id="CarParkID" v-model="CarParkList.CarParkID" type="text" rules="required" />
-            <ErrorMessage class="text-danger" name="停車場代碼" />
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label for="Zh_tw" class="form-label">
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                停車場中文名稱
-                <span class="text-danger">*</span>
-            </label>
-            <div id="Zh_twHelp" class="form-text">
-                <p>
-                    範例值: 板橋大遠百購物中心停車場
-                </p>
+            <div class="mb-3 d-flex flex-column">
+                <label for="Zh_tw" class="form-label">
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
+                    停車場中文名稱
+                    <span class="text-danger">*</span>
+                </label>
+                <div id="Zh_twHelp" class="form-text">
+                    <p>
+                        範例值: 板橋大遠百購物中心停車場
+                    </p>
+                </div>
+                <VField name="停車場中文名稱" id="Zh_tw" v-model="CarParkList.Zh_tw" type="text" rules="required" />
+                <ErrorMessage class="text-danger" name="停車場中文名稱" />
             </div>
-            <VField name="停車場中文名稱" id="Zh_tw" v-model="CarParkList.Zh_tw" type="text" rules="required" />
-            <ErrorMessage class="text-danger" name="停車場中文名稱" />
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label for="En" class="form-label">
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                停車場英文名稱 (選填)
-            </label>
-            <div id="EnHelp" class="form-text">
-                <p>
-                    範例值: mega city parking garage
-                </p>
+            <div class="mb-3 d-flex flex-column">
+                <label for="En" class="form-label">
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
+                    停車場英文名稱 (選填)
+                </label>
+                <div id="EnHelp" class="form-text">
+                    <p>
+                        範例值: mega city parking garage
+                    </p>
+                </div>
+                <VField name="停車場英文名稱" id="En" v-model="CarParkList.En" type="text" />
             </div>
-            <VField name="停車場英文名稱" id="En" v-model="CarParkList.En" type="text" />
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label for="OperatorID" class="form-label">
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                營運業者代碼
-                <span class="text-danger">*</span>
-            </label>
-            <div id="OperatorIDHelp" class="form-text">
-                <p>
-                    由各來源自訂營運業者代碼，請填寫公司統一編號
-                </p>
+            <div class="mb-3 d-flex flex-column">
+                <label for="OperatorID" class="form-label">
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
+                    營運業者代碼
+                    <span class="text-danger">*</span>
+                </label>
+                <div id="OperatorIDHelp" class="form-text">
+                    <p>
+                        由各來源自訂營運業者代碼，請填寫公司統一編號
+                    </p>
+                </div>
+                <VField name="營運業者代碼" id="OperatorID" v-model="CarParkList.OperatorID" type="number"
+                    rules="required|length:8" />
+                <ErrorMessage class="text-danger" name="營運業者代碼" />
             </div>
-            <VField name="營運業者代碼" id="OperatorID" v-model="CarParkList.OperatorID" type="number"
-                rules="required|length:8" />
-            <ErrorMessage class="text-danger" name="營運業者代碼" />
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label for="Description" class="form-label">
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                停車場綜合描述
-                <span class="text-danger">*</span>
-            </label>
-            <div id="DescriptionHelp" class="form-text">
-                <p>
-                    描述該停車場更加詳細的資料<br>
-                    <span>
-                        如：立體式小型車 496 格(含身心障礙停車位 10 格)。
-                    </span>
-                </p>
-            </div>
-            <VField name="停車場綜合描述" id="Description" v-model="CarParkList.Description" type="text" as="textarea"
-                rules="required" />
-            <ErrorMessage class="text-danger" name="停車場綜合描述" />
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label>
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                停車場類型
-                <span class="text-danger">*</span>
-            </label>
-            <div id="CarParkTypeHelp" class="form-text">
-                <p>立體停車塔屬標準的機械塔式停車場<br>
-                    <span>
-                        立體機械式屬簡易之機械式停車場
-                    </span>
-                </p>
-            </div>
-            <div class="text-danger" v-if="CarParkList.CarParkType == ''">停車場類型 為必填</div>
-            <label v-for="carType in CarParkTypes" :key="carType.CarParkType">
-                <input class="me-1" type="radio" :value="carType.CarParkType" v-model="CarParkList.CarParkType"
+            <div class="mb-3 d-flex flex-column">
+                <label for="Description" class="form-label">
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
+                    停車場綜合描述
+                    <span class="text-danger">*</span>
+                </label>
+                <div id="DescriptionHelp" class="form-text">
+                    <p>
+                        描述該停車場更加詳細的資料<br>
+                        <span>
+                            如：立體式小型車 496 格(含身心障礙停車位 10 格)。
+                        </span>
+                    </p>
+                </div>
+                <VField name="停車場綜合描述" id="Description" v-model="CarParkList.Description" type="text" as="textarea"
                     rules="required" />
-                {{ carType.typeDesc }}
-            </label>
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label>
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                停車導引類型
-                <span class="text-danger">*</span>
-            </label>
-            <div id="ParkingGuideTypeHelp" class="form-text">
-                <p>
-                    描述該停車場主要停車導引類型
-                </p>
+                <ErrorMessage class="text-danger" name="停車場綜合描述" />
             </div>
-            <div class="text-danger" v-if="CarParkList.ParkingGuideType == ''">停車場導引類型 為必填</div>
-            <label v-for="ParkingGuideType in ParkingGuideTypes" :key="ParkingGuideType.ParkingGuideType">
-                <input class="me-1" type="radio" :value="ParkingGuideType.ParkingGuideType"
-                    v-model="CarParkList.ParkingGuideType" rules="required" />
-                {{ ParkingGuideType.typeDesc }}
-            </label>
-        </div>
-        <!-- ParkingAreas -->
-        <div class="mb-3 d-flex flex-column">
-            <label>
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                是否有分停車場區域
-                <span class="text-danger">*</span>
-            </label>
-            <div id="hasParkingAreasHelp" class="form-text">
-                <p>
-                    可包絡多筆<br>
-                    停車場區域可為平面位置上的區分多個停車場區域，亦可能是立體不同樓層的區分停車場區域
-                </p>
-            </div>
-            <div class="text-danger" v-if="hasParkingAreas == null">是否有分停車場區域 為必填</div>
-            <div class="d-flex">
+            <div class="mb-3 d-flex flex-column">
                 <label>
-                    <input class="me-1" type="radio" value="true" v-model="hasParkingAreas" /> 是
-
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
+                    停車場類型
+                    <span class="text-danger">*</span>
                 </label>
-                <label class="ms-1">
-                    <input class="me-1" type="radio" value="false" v-model="hasParkingAreas" /> 否
+                <div id="CarParkTypeHelp" class="form-text">
+                    <p>立體停車塔屬標準的機械塔式停車場<br>
+                        <span>
+                            立體機械式屬簡易之機械式停車場
+                        </span>
+                    </p>
+                </div>
+                <div class="text-danger" v-if="CarParkList.CarParkType == ''">停車場類型 為必填</div>
+                <label v-for="carType in CarParkTypes" :key="carType.CarParkType">
+                    <input class="me-1" type="radio" :value="carType.CarParkType" v-model="CarParkList.CarParkType"
+                        rules="required" />
+                    {{ carType.typeDesc }}
                 </label>
             </div>
-        </div>
-
-        <div class="ParkingAreas" v-if="hasParkingAreas == 'true'">
-            <h2 class="text-center">停車場區域資料</h2>
-            <div v-for="(ParkingArea, index) in ParkingAreas" :key="index">
-                <hr>
-                <div class="mb-3 d-flex flex-column">
-                    <label for="ParkingAreaID" class="form-label">
-                        <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                        停車場區域代碼
-                        <span class="text-danger">*</span>
-                    </label>
-                    <div id="ParkingAreaIDHelp" class="form-text">
-                        <p>停車場區域代碼<br>
-                            <span>
-                                停車場區域可為平面位置上的區分多個停車場區域，亦可能是立體不同樓層的區分停車場區域
-                            </span>
-                        </p>
-                    </div>
-                    <VField :id="'ParkingAreaID_' + index" v-model="ParkingArea.ParkingAreaID" type="text"
-                        :rules="{ required: true }" :name="'停車場區域代碼_' + index" />
-                    <ErrorMessage :name="'停車場區域代碼_' + index" class="text-danger" />
+            <div class="mb-3 d-flex flex-column">
+                <label>
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
+                    停車導引類型
+                    <span class="text-danger">*</span>
+                </label>
+                <div id="ParkingGuideTypeHelp" class="form-text">
+                    <p>
+                        描述該停車場主要停車導引類型
+                    </p>
                 </div>
-                <div class="mb-3 d-flex flex-column">
-                    <label for="ParkingAreaName" class="form-label">
-                        <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                        停車場區域名稱
-                        <span class="text-danger">*</span>
-                    </label>
-                    <div id="ParkingAreaNameHelp" class="form-text">
-                        <p>停車場區域名稱<br>
-                            <span>
-                                如：高速公路有些服務區停車場，可能分多個停車區域
-                                最簡單的是分北上停車場區域、南下停車場區域，也可分北上小型車停車廠區域、北上大型車場區域
-                            </span>
-                        </p>
-                    </div>
-                    <VField :id="'ParkingAreaName_' + index" v-model="ParkingArea.ParkingAreaName" type="text"
-                        :rules="{ required: true }" :name="'停車場區域名稱_' + index" />
-                    <ErrorMessage :name="'停車場區域名稱_' + index" class="text-danger" />
+                <div class="text-danger" v-if="CarParkList.ParkingGuideType == ''">停車場導引類型 為必填</div>
+                <label v-for="ParkingGuideType in ParkingGuideTypes" :key="ParkingGuideType.ParkingGuideType">
+                    <input class="me-1" type="radio" :value="ParkingGuideType.ParkingGuideType"
+                        v-model="CarParkList.ParkingGuideType" rules="required" />
+                    {{ ParkingGuideType.typeDesc }}
+                </label>
+            </div>
+            <!-- ParkingAreas -->
+            <div class="mb-3 d-flex flex-column">
+                <label>
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
+                    是否有分停車場區域
+                    <span class="text-danger">*</span>
+                </label>
+                <div id="hasParkingAreasHelp" class="form-text">
+                    <p>
+                        可包絡多筆<br>
+                        停車場區域可為平面位置上的區分多個停車場區域，亦可能是立體不同樓層的區分停車場區域
+                    </p>
                 </div>
-                <div class="mb-3 d-flex flex-column">
+                <div class="text-danger" v-if="hasParkingAreas == null">是否有分停車場區域 為必填</div>
+                <div class="d-flex">
                     <label>
-                        <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                        停車類型
-                        <span class="text-danger">*</span>
+                        <input class="me-1" type="radio" value="true" v-model="hasParkingAreas" /> 是
+
                     </label>
-                    <div id="ParkingAreaParkingTypesHelp" class="form-text">
-                        <p>建議至多填 3 種主要停車類型即可
-                        </p>
-                    </div>
-                    <div v-if="ParkingArea.ParkingTypes.length <= 0" class="text-danger">停車類型 為必填</div>
-                    <div v-for="(type, index) in ParkingTypes" :key="type.ParkingType">
-                        <input class="me-1" :id="'parkingType_' + index + '_' + type.ParkingType" :value="type.ParkingType"
-                            type="checkbox" :checked="ParkingArea.ParkingTypes.includes(type.ParkingType)"
-                            @change="toggleAreaParkingType(ParkingArea, type.ParkingType)" />
-                        <label :for="'parkingType_' + index + '_' + type.ParkingType">{{ type.typeDesc }}</label>
-                    </div>
-                    <!-- todo checkbox validation -->
-                    <ErrorMessage :name="'停車類型' + index" class="text-danger" />
-                </div>
-
-                <p class="text-warning bg-dark">
-                    完成每筆區域資料後，<br>
-                    請點擊<u><b>儲存區域資料</b></u>按鈕以保存
-                </p>
-                <div class="d-flex justify-content-between">
-                    <button class="btn btn-outline-danger" @click.prevent="removeParkingArea(index)">
-                        移除第 {{ index + 1 }} 筆資料
-                    </button>
-                    <button class="btn btn-primary" @click.prevent="sendParkingArea(index)">
-                        儲存區域資料
-                    </button>
+                    <label class="ms-1">
+                        <input class="me-1" type="radio" value="false" v-model="hasParkingAreas" /> 否
+                    </label>
                 </div>
             </div>
-            <button class="btn btn-outline-primary mt-2" @click.prevent="addParkingArea()">加入停車場區域資料</button>
-        </div>
-        <!-- ParkingAreas end -->
 
-        <div class="mb-3 d-flex flex-column">
-            <label>
-                <img src="../../assets/images/robotic-hand.png" alt="" class="form-icon">
-                停車類型
-                <span class="text-danger">*</span>
-            </label>
-            <div id="ParkingTypesHelp" class="form-text">
-                <p>
-                    建議至多填 3 種主要類型即可
-                </p>
+            <div class="ParkingAreas" v-if="hasParkingAreas == 'true'">
+                <h2 class="text-center">停車場區域資料</h2>
+                <div v-for="(ParkingArea, index) in ParkingAreas" :key="index">
+                    <hr>
+                    <div class="mb-3 d-flex flex-column">
+                        <label for="ParkingAreaID" class="form-label">
+                            <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
+                            停車場區域代碼
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div id="ParkingAreaIDHelp" class="form-text">
+                            <p>停車場區域代碼<br>
+                                <span>
+                                    停車場區域可為平面位置上的區分多個停車場區域，亦可能是立體不同樓層的區分停車場區域
+                                </span>
+                            </p>
+                        </div>
+                        <VField :id="'ParkingAreaID_' + index" v-model="ParkingArea.ParkingAreaID" type="text"
+                            :rules="{ required: true }" :name="'停車場區域代碼_' + index" />
+                        <ErrorMessage :name="'停車場區域代碼_' + index" class="text-danger" />
+                    </div>
+                    <div class="mb-3 d-flex flex-column">
+                        <label for="ParkingAreaName" class="form-label">
+                            <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
+                            停車場區域名稱
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div id="ParkingAreaNameHelp" class="form-text">
+                            <p>停車場區域名稱<br>
+                                <span>
+                                    如：高速公路有些服務區停車場，可能分多個停車區域
+                                    最簡單的是分北上停車場區域、南下停車場區域，也可分北上小型車停車廠區域、北上大型車場區域
+                                </span>
+                            </p>
+                        </div>
+                        <VField :id="'ParkingAreaName_' + index" v-model="ParkingArea.Zh_tw" type="text"
+                            :rules="{ required: true }" :name="'停車場區域名稱_' + index" />
+                        <ErrorMessage :name="'停車場區域名稱_' + index" class="text-danger" />
+                    </div>
+                    <div class="mb-3 d-flex flex-column">
+                        <label for="ParkingAreaNameEn" class="form-label">
+                            <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
+                            停車場區域英文名稱 (選填)
+                        </label>
+                        <div id="ParkingAreaNameEnHelp" class="form-text">
+                            <p>停車場區域英文名稱<br>
+                                <span>
+                                    如：SouthBound
+                                </span>
+                            </p>
+                        </div>
+                        <VField :id="'ParkingAreaNameEn_' + index" v-model="ParkingArea.En" type="text"
+                            :name="'停車場區域英文名稱_' + index" />
+                    </div>
+                    <div class="mb-3 d-flex flex-column">
+                        <label>
+                            <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
+                            停車類型
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div id="ParkingAreaParkingTypesHelp" class="form-text">
+                            <p>建議至多填 3 種主要停車類型即可
+                            </p>
+                        </div>
+                        <div v-if="ParkingArea.ParkingType.length <= 0" class="text-danger">停車類型 為必填</div>
+                        <div v-for="(type, index) in ParkingTypes" :key="type.ParkingType">
+                            <input class="me-1" :id="'parkingType_' + index + '_' + type.ParkingType"
+                                :value="type.ParkingType" type="checkbox"
+                                :checked="ParkingArea.ParkingType.includes(type.ParkingType)"
+                                @change="toggleAreaParkingType(ParkingArea, type.ParkingType)" />
+                            <label @click.prevent="toggleAreaParkingType(ParkingArea, type.ParkingType)"
+                                :for="'parkingType_' + index + '_' + type.ParkingType">
+                                {{ type.typeDesc }}
+                            </label>
+                        </div>
+                        <!-- todo checkbox validation -->
+                        <ErrorMessage :name="'停車類型' + index" class="text-danger" />
+                    </div>
+
+                    <p class="text-warning bg-dark">
+                        完成每筆區域資料後，<br>
+                        請點擊<u><b>儲存區域資料</b></u>按鈕以保存
+                    </p>
+                    <div class="d-flex justify-content-between">
+                        <button class="btn btn-outline-danger" @click="removeParkingArea(index)">
+                            移除
+                        </button>
+                        <button class="btn btn-primary" @click.prevent="sendParkingArea(index)">
+                            儲存區域資料
+                        </button>
+                    </div>
+                </div>
+                <button class="btn btn-outline-primary mt-2" @click.prevent="addParkingArea()">加入停車場區域資料</button>
             </div>
-            <div v-if="CarParkList.ParkingTypes.length <= 0" class="text-danger">停車類型 為必填</div>
-            <div v-for="(type, typeIndex) in ParkingTypes" :key="type.ParkingType">
-                <input class="me-1" type="checkbox" :id="`parkingType_${typeIndex}`" :value="type.ParkingType"
-                    :checked="ParkingTypes.includes(type.ParkingType)"
-                    @change="toggleParkingType(typeIndex, type.ParkingType)" />
-                <label :for="`parkingType_${typeIndex}`">
-                    {{ type.typeDesc }}
+            <!-- ParkingAreas end -->
+
+            <div class="mb-3 d-flex flex-column">
+                <label>
+                    <img src="../../assets/images/robotic-hand.png" alt="" class="form-icon">
+                    停車類型
+                    <span class="text-danger">*</span>
                 </label>
+                <div id="ParkingTypesHelp" class="form-text">
+                    <p>
+                        建議至多填 3 種主要類型即可
+                    </p>
+                </div>
+                <div v-if="CarParkList.ParkingType.length <= 0" class="text-danger">停車類型 為必填</div>
+                <div v-for="(type, typeIndex) in ParkingTypes" :key="type.ParkingType">
+                    <input class="me-1" type="checkbox" :id="`parkingType_${typeIndex}`" :value="type.ParkingType"
+                        v-model="CarParkList.ParkingType" :checked="ParkingTypes.includes(type.ParkingType)" />
+                    <label :for="`parkingType_${typeIndex}`">
+                        {{ type.typeDesc }}
+                    </label>
+                </div>
             </div>
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label>
-                <img src="../../assets/images/robotic-hand.png" alt="" class="form-icon">
-                停車場服務類型
-                <span class="text-danger">*</span>
-            </label>
-            <div id="ParkingSiteTypesHelp" class="form-text">
-                <p>
-                    建議至多填 3 種主要類型即可
-                </p>
-            </div>
-            <div v-if="CarParkList.ParkingSiteTypes.length <= 0" class="text-danger">停車場服務類型 為必填</div>
-            <div v-for="(type, typeIndex) in ParkingSiteTypes" :key="type.ParkingSiteTypes">
-                <input class="me-1" type="checkbox" :id="`ParkingSiteType_${typeIndex}`" :value="type.ParkingSiteType"
-                    :checked="ParkingSiteTypes.includes(type.ParkingSiteType)"
-                    @change="toggleParkingSiteTypes(typeIndex, type.ParkingSiteType)" />
-                <label :for="`ParkingSiteType_${typeIndex}`">
-                    {{ type.typeDesc }}
+            <div class="mb-3 d-flex flex-column">
+                <label>
+                    <img src="../../assets/images/robotic-hand.png" alt="" class="form-icon">
+                    停車場服務類型
+                    <span class="text-danger">*</span>
                 </label>
+                <div id="ParkingSiteTypesHelp" class="form-text">
+                    <p>
+                        建議至多填 3 種主要類型即可
+                    </p>
+                </div>
+                <div v-if="CarParkList.ParkingSiteType.length <= 0" class="text-danger">停車場服務類型 為必填</div>
+                <div v-for="(type, typeIndex) in ParkingSiteTypes" :key="type.ParkingSiteType">
+                    <input class="me-1" type="checkbox" :id="`ParkingSiteType_${typeIndex}`" :value="type.ParkingSiteType"
+                        v-model="CarParkList.ParkingSiteType" :checked="ParkingSiteTypes.includes(type.ParkingSiteType)" />
+                    <label :for="`ParkingSiteType_${typeIndex}`">
+                        {{ type.typeDesc }}
+                    </label>
+                </div>
             </div>
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label>
-                <img src="../../assets/images/robotic-hand.png" alt="" class="form-icon">
-                停車場收費方式
-                <span class="text-danger">*</span>
-            </label>
-            <div id="ChargeTypesHelp" class="form-text">
-                <p>
-                    填列停車場主要收費方式
-                </p>
-            </div>
-            <div v-if="this.CarParkList.ChargeTypes.length === 0" class="text-danger">停車場收費方式 為必填</div>
-            <div v-for="(type, typeIndex) in ChargeTypes" :key="type.ChargeType">
-                <input class="me-1" type="checkbox" :id="`ChargeType_${typeIndex}`" :value="type.ChargeType"
-                    :checked="ChargeTypes.includes(type.ChargeType)" @change="toggleChargeTypes(typeIndex, type.ChargeType)"
-                    :required="this.CarParkList.ChargeTypes.length === 0" />
-                <label :for="`ChargeType_${typeIndex}`">
-                    {{ type.typeDesc }}
+            <div class="mb-3 d-flex flex-column">
+                <label>
+                    <img src="../../assets/images/robotic-hand.png" alt="" class="form-icon">
+                    停車場收費方式
+                    <span class="text-danger">*</span>
                 </label>
+                <div id="ChargeTypesHelp" class="form-text">
+                    <p>
+                        填列停車場主要收費方式
+                    </p>
+                </div>
+                <div v-if="this.CarParkList.ChargeType.length === 0" class="text-danger">停車場收費方式 為必填</div>
+                <div v-for="(type, typeIndex) in ChargeTypes" :key="type.ChargeType">
+                    <input class="me-1" type="checkbox" :id="`ChargeType_${typeIndex}`" :value="type.ChargeType"
+                        v-model="CarParkList.ChargeType" :checked="ChargeTypes.includes(type.ChargeType)"
+                        :required="this.CarParkList.ChargeType.length === 0" />
+                    <label :for="`ChargeType_${typeIndex}`">
+                        {{ type.typeDesc }}
+                    </label>
+                </div>
             </div>
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label for="Telephone" class="form-label">
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                停車場連絡電話 (選填)
-            </label>
-            <div id="TelephoneHelp" class="form-text">
-                <p>
-                    如：02-23955514
-                </p>
+            <div class="mb-3 d-flex flex-column">
+                <label for="Telephone" class="form-label">
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
+                    停車場連絡電話 (選填)
+                </label>
+                <div id="TelephoneHelp" class="form-text">
+                    <p>
+                        如：02-23955514
+                    </p>
+                </div>
+                <VField name="停車場連絡電話" id="Telephone" v-model="CarParkList.Telephone" type="text" />
+                <ErrorMessage class="text-danger" name="停車場連絡電話" />
             </div>
-            <VField name="停車場連絡電話" id="Telephone" v-model="CarParkList.Telephone" type="text" />
-            <ErrorMessage class="text-danger" name="停車場連絡電話" />
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label for="EmergencyPhone" class="form-label">
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                緊急連絡電話 (選填)
-            </label>
-            <div id="EmergencyPhone" class="form-text">
-                <p>
-                    如：0912-345-678
-                </p>
+            <div class="mb-3 d-flex flex-column">
+                <label for="EmergencyPhone" class="form-label">
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
+                    緊急連絡電話 (選填)
+                </label>
+                <div id="EmergencyPhone" class="form-text">
+                    <p>
+                        如：0912-345-678
+                    </p>
+                </div>
+                <VField name="緊急連絡電話" id="EmergencyPhone" v-model="CarParkList.EmergencyPhone" type="text" />
+                <ErrorMessage class="text-danger" name="緊急連絡電話" />
             </div>
-            <VField name="緊急連絡電話" id="EmergencyPhone" v-model="CarParkList.EmergencyPhone" type="text" />
-            <ErrorMessage class="text-danger" name="緊急連絡電話" />
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label for="PositionLat" class="form-label">
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                位置緯度(WGS84)
-                <span class="text-danger">*</span>
-            </label>
-            <div id="PositionLatHelp" class="form-text">
-                <p>
-                    坐標系統為 WGS84，如25.02516。(請填寫至小數點後五碼)
-                </p>
+            <div class="mb-3 d-flex flex-column">
+                <label for="PositionLat" class="form-label">
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
+                    位置緯度(WGS84)
+                    <span class="text-danger">*</span>
+                </label>
+                <div id="PositionLatHelp" class="form-text">
+                    <p>
+                        坐標系統為 WGS84，如25.02516。(請填寫至小數點後五碼)
+                    </p>
+                </div>
+                <VField name="位置緯度(WGS84) " id="PositionLat" v-model="CarParkList.PositionLat" type="text"
+                    rules="required" />
+                <ErrorMessage class="text-danger" name="位置緯度(WGS84) " />
             </div>
-            <VField name="位置緯度(WGS84) " id="PositionLat" v-model="CarParkList.PositionLat" type="text" rules="required" />
-            <ErrorMessage class="text-danger" name="位置緯度(WGS84) " />
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label for="PositionLon" class="form-label">
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                位置經度(WGS84)
-                <span class="text-danger">*</span>
-            </label>
-            <div id="PositionLonHelp" class="form-text">
-                <p>
-                    該停車場所在位置代表點坐標<br>
-                    坐標系統為 WGS84，如25.02516。(請填寫至小數點後五碼)
-                </p>
+            <div class="mb-3 d-flex flex-column">
+                <label for="PositionLon" class="form-label">
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
+                    位置經度(WGS84)
+                    <span class="text-danger">*</span>
+                </label>
+                <div id="PositionLonHelp" class="form-text">
+                    <p>
+                        該停車場所在位置代表點坐標<br>
+                        坐標系統為 WGS84，如25.02516。(請填寫至小數點後五碼)
+                    </p>
+                </div>
+                <VField name="位置經度(WGS84) " id="PositionLon" v-model="CarParkList.PositionLon" type="text"
+                    rules="required" />
+                <ErrorMessage class="text-danger" name="位置經度(WGS84) " />
             </div>
-            <VField name="位置經度(WGS84) " id="PositionLon" v-model="CarParkList.PositionLon" type="text" rules="required" />
-            <ErrorMessage class="text-danger" name="位置經度(WGS84) " />
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label for="Email" class="form-label">
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                電子信箱 (選填)
-            </label>
-            <div id="EmailHelp" class="form-text">
-                <p>
-                    請填寫有效的電子信箱
-                </p>
+            <div class="mb-3 d-flex flex-column">
+                <label for="Email" class="form-label">
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
+                    電子信箱 (選填)
+                </label>
+                <div id="EmailHelp" class="form-text">
+                    <p>
+                        請填寫有效的電子信箱
+                    </p>
+                </div>
+                <VField name="電子信箱 " id="Email" v-model="CarParkList.Email" type="email" />
+                <ErrorMessage class="text-danger" name="電子信箱" />
             </div>
-            <VField name="電子信箱 " id="Email" v-model="CarParkList.Email" type="email" />
-            <ErrorMessage class="text-danger" name="電子信箱" />
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label for="Address" class="form-label">
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                停車場地址
-                <span class="text-danger">*</span>
-            </label>
-            <div id="AddressHelp" class="form-text">
-                <p>
-                    請填寫停車場地址
-                </p>
+            <div class="mb-3 d-flex flex-column">
+                <label for="Address" class="form-label">
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
+                    停車場地址
+                    <span class="text-danger">*</span>
+                </label>
+                <div id="AddressHelp" class="form-text">
+                    <p>
+                        請填寫停車場地址
+                    </p>
+                </div>
+                <VField name="停車場地址" id="Address" v-model="CarParkList.Address" type="text" rules="required" />
+                <ErrorMessage class="text-danger" name="停車場地址" />
             </div>
-            <VField name="停車場地址" id="Address" v-model="CarParkList.Address" type="text" rules="required" />
-            <ErrorMessage class="text-danger" name="停車場地址" />
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label for="FareDescription" class="form-label">
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                票價資訊文字描述
-                <span class="text-danger">*</span>
-            </label>
-            <div id="FareDescriptionHelp" class="form-text">
-                <p>
-                    該停車場所提供各項票價詳細資訊，如：<br>
-                    <span>
-                        計時：20 元/時(8-18)，10 元/時(18-8)。<br>
-                        每日(20-8)最高收費 50 元，全程以半小時計費。
-                    </span>
-                </p>
+            <div class="mb-3 d-flex flex-column">
+                <label for="FareDescription" class="form-label">
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
+                    票價資訊文字描述
+                    <span class="text-danger">*</span>
+                </label>
+                <div id="FareDescriptionHelp" class="form-text">
+                    <p>
+                        該停車場所提供各項票價詳細資訊，如：<br>
+                        <span>
+                            計時：20 元/時(8-18)，10 元/時(18-8)。<br>
+                            每日(20-8)最高收費 50 元，全程以半小時計費。
+                        </span>
+                    </p>
+                </div>
+                <VField name="票價資訊文字描述" type="text" as="textarea" id="FareDescription" v-model="CarParkList.FareDescription"
+                    rules="required" />
+                <ErrorMessage class="text-danger" name="票價資訊文字描述" />
             </div>
-            <VField name="票價資訊文字描述" type="text" as="textarea" id="FareDescription" v-model="CarParkList.FareDescription"
-                rules="required" />
-            <ErrorMessage class="text-danger" name="票價資訊文字描述" />
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label>
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                是否在營業時間外不收費
-                <span class="text-danger">*</span>
-            </label>
-            <div id="IsFreeParkingOutOfHoursHelp" class="form-text">
-                <p>
+            <div class="mb-3 d-flex flex-column">
+                <label>
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
                     是否在營業時間外不收費
-                </p>
+                    <span class="text-danger">*</span>
+                </label>
+                <div id="IsFreeParkingOutOfHoursHelp" class="form-text">
+                    <p>
+                        是否在營業時間外不收費
+                    </p>
+                </div>
+                <div class="text-danger" v-if="CarParkList.IsFreeParkingOutOfHours == ''">是否在營業時間外不收費 為必填</div>
+                <div class="d-flex">
+                    <label>
+                        <input class="me-1" type="radio" value="1" v-model="CarParkList.IsFreeParkingOutOfHours" /> 是
+                    </label>
+                    <label class="ms-1">
+                        <input class="me-1" type="radio" value="0" checked="true"
+                            v-model="CarParkList.IsFreeParkingOutOfHours" />
+                        否(預設)
+                    </label>
+                </div>
             </div>
-            <div class="text-danger" v-if="CarParkList.IsFreeParkingOutOfHours == ''">是否在營業時間外不收費 為必填</div>
-            <div class="d-flex">
+            <div class="mb-3 d-flex flex-column">
                 <label>
-                    <input class="me-1" type="radio" value="1" v-model="CarParkList.IsFreeParkingOutOfHours" /> 是
-                </label>
-                <label class="ms-1">
-                    <input class="me-1" type="radio" value="0" checked="true"
-                        v-model="CarParkList.IsFreeParkingOutOfHours" />
-                    否(預設)
-                </label>
-            </div>
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label>
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                是否為公有停車場
-                <span class="text-danger">*</span>
-            </label>
-            <div id="IsPublicHelp" class="form-text">
-                <p>
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
                     是否為公有停車場
-                </p>
+                    <span class="text-danger">*</span>
+                </label>
+                <div id="IsPublicHelp" class="form-text">
+                    <p>
+                        是否為公有停車場
+                    </p>
+                </div>
+                <div class="text-danger" v-if="CarParkList.IsPublic == ''">是否為公有停車場 為必填</div>
+                <div class="d-flex">
+                    <label>
+                        <input class="me-1" type="radio" value="1" v-model="CarParkList.IsPublic" /> 公有停車場(預設)
+                    </label>
+                    <label class="ms-1">
+                        <input class="me-1" type="radio" value="0" v-model="CarParkList.IsPublic" /> 私人停車場
+                    </label>
+                </div>
             </div>
-            <div class="text-danger" v-if="CarParkList.IsPublic == ''">是否為公有停車場 為必填</div>
-            <div class="d-flex">
+            <div class="mb-3 d-flex flex-column">
                 <label>
-                    <input class="me-1" type="radio" value="1" v-model="CarParkList.IsPublic" /> 公有停車場(預設)
-                </label>
-                <label class="ms-1">
-                    <input class="me-1" type="radio" value="0" v-model="CarParkList.IsPublic" /> 私人停車場
-                </label>
-            </div>
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label>
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                營運種類
-                <span class="text-danger">*</span>
-            </label>
-            <div id="OperationTypeHelp" class="form-text">
-                <p>
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
                     營運種類
-                </p>
+                    <span class="text-danger">*</span>
+                </label>
+                <div id="OperationTypeHelp" class="form-text">
+                    <p>
+                        營運種類
+                    </p>
+                </div>
+                <div class="text-danger" v-if="CarParkList.OperationType == ''">營運種類 為必填</div>
+                <div class="d-flex">
+                    <label>
+                        <input class="me-1" type="radio" value="1" v-model="CarParkList.OperationType" /> 公辦民營
+                    </label>
+                    <label class="ms-1">
+                        <input class="me-1" type="radio" value="2" v-model="CarParkList.OperationType" /> 公辦公營
+                    </label>
+                    <label class="ms-1">
+                        <input class="me-1" type="radio" value="3" v-model="CarParkList.OperationType" /> 私有民營
+                    </label>
+                </div>
             </div>
-            <div class="text-danger" v-if="CarParkList.OperationType == ''">營運種類 為必填</div>
-            <div class="d-flex">
+            <div class="mb-3 d-flex flex-column">
                 <label>
-                    <input class="me-1" type="radio" value="1" v-model="CarParkList.OperationType" /> 公辦民營
-                </label>
-                <label class="ms-1">
-                    <input class="me-1" type="radio" value="2" v-model="CarParkList.OperationType" /> 公辦公營
-                </label>
-                <label class="ms-1">
-                    <input class="me-1" type="radio" value="3" v-model="CarParkList.OperationType" /> 私有民營
-                </label>
-            </div>
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label>
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                是否有提供動態剩餘車位資訊
-                <span class="text-danger">*</span>
-            </label>
-            <div id="LiveOccupancyAvailableHelp" class="form-text">
-                <p>
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
                     是否有提供動態剩餘車位資訊
-                </p>
+                    <span class="text-danger">*</span>
+                </label>
+                <div id="LiveOccupancyAvailableHelp" class="form-text">
+                    <p>
+                        是否有提供動態剩餘車位資訊
+                    </p>
+                </div>
+                <div class="text-danger" v-if="CarParkList.LiveOccupancyAvailable == ''">是否有提供動態剩餘車位資訊 為必填</div>
+                <div class="d-flex">
+                    <label>
+                        <input class="me-1" type="radio" value="1" v-model="CarParkList.LiveOccupancyAvailable" /> 是
+                    </label>
+                    <label class="ms-1">
+                        <input class="me-1" type="radio" value="0" v-model="CarParkList.LiveOccupancyAvailable" /> 否(預設)
+                    </label>
+                </div>
             </div>
-            <div class="text-danger" v-if="CarParkList.LiveOccupancyAvailable == ''">是否有提供動態剩餘車位資訊 為必填</div>
-            <div class="d-flex">
+            <div class="mb-3 d-flex flex-column">
                 <label>
-                    <input class="me-1" type="radio" value="1" v-model="CarParkList.LiveOccupancyAvailable" /> 是
-                </label>
-                <label class="ms-1">
-                    <input class="me-1" type="radio" value="0" v-model="CarParkList.LiveOccupancyAvailable" /> 否(預設)
-                </label>
-            </div>
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label>
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                是否有電動車充電設施
-                <span class="text-danger">*</span>
-            </label>
-            <div id="EVRechargingAvailableHelp" class="form-text">
-                <p>
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
                     是否有電動車充電設施
-                </p>
+                    <span class="text-danger">*</span>
+                </label>
+                <div id="EVRechargingAvailableHelp" class="form-text">
+                    <p>
+                        是否有電動車充電設施
+                    </p>
+                </div>
+                <div class="text-danger" v-if="CarParkList.EVRechargingAvailable == ''">是否有電動車充電設施 為必填</div>
+                <div class="d-flex">
+                    <label>
+                        <input class="me-1" type="radio" value="1" v-model="CarParkList.EVRechargingAvailable" /> 是
+                    </label>
+                    <label class="ms-1">
+                        <input class="me-1" type="radio" value="0" v-model="CarParkList.EVRechargingAvailable" /> 否(預設)
+                    </label>
+                </div>
             </div>
-            <div class="text-danger" v-if="CarParkList.EVRechargingAvailable == ''">是否有電動車充電設施 為必填</div>
-            <div class="d-flex">
+            <div class="mb-3 d-flex flex-column">
                 <label>
-                    <input class="me-1" type="radio" value="1" v-model="CarParkList.EVRechargingAvailable" /> 是
-                </label>
-                <label class="ms-1">
-                    <input class="me-1" type="radio" value="0" v-model="CarParkList.EVRechargingAvailable" /> 否(預設)
-                </label>
-            </div>
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label>
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                是否有提供月票服務
-                <span class="text-danger">*</span>
-            </label>
-            <div id="MonthlyTicketAvailableHelp" class="form-text">
-                <p>
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
                     是否有提供月票服務
-                </p>
+                    <span class="text-danger">*</span>
+                </label>
+                <div id="MonthlyTicketAvailableHelp" class="form-text">
+                    <p>
+                        是否有提供月票服務
+                    </p>
+                </div>
+                <div class="text-danger" v-if="CarParkList.MonthlyTicketAvailable == ''">是否有提供月票服務 為必填</div>
+                <div class="d-flex">
+                    <label>
+                        <input class="me-1" type="radio" value="1" v-model="CarParkList.MonthlyTicketAvailable" /> 是
+                    </label>
+                    <label class="ms-1">
+                        <input class="me-1" type="radio" value="0" v-model="CarParkList.MonthlyTicketAvailable" /> 否(預設)
+                    </label>
+                </div>
             </div>
-            <div class="text-danger" v-if="CarParkList.MonthlyTicketAvailable == ''">是否有提供月票服務 為必填</div>
-            <div class="d-flex">
+            <div class="mb-3 d-flex flex-column">
                 <label>
-                    <input class="me-1" type="radio" value="1" v-model="CarParkList.MonthlyTicketAvailable" /> 是
-                </label>
-                <label class="ms-1">
-                    <input class="me-1" type="radio" value="0" v-model="CarParkList.MonthlyTicketAvailable" /> 否(預設)
-                </label>
-            </div>
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label>
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                是否有提供季票服務
-                <span class="text-danger">*</span>
-            </label>
-            <div id="SeasonTicketAvailableHelp" class="form-text">
-                <p>
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
                     是否有提供季票服務
-                </p>
+                    <span class="text-danger">*</span>
+                </label>
+                <div id="SeasonTicketAvailableHelp" class="form-text">
+                    <p>
+                        是否有提供季票服務
+                    </p>
+                </div>
+                <div class="text-danger" v-if="CarParkList.SeasonTicketAvailable == ''">是否有提供季票服務 為必填</div>
+                <div class="d-flex">
+                    <label>
+                        <input class="me-1" type="radio" value="1" v-model="CarParkList.SeasonTicketAvailable" /> 是
+                    </label>
+                    <label class="ms-1">
+                        <input class="me-1" type="radio" value="0" v-model="CarParkList.SeasonTicketAvailable" /> 否(預設)
+                    </label>
+                </div>
             </div>
-            <div class="text-danger" v-if="CarParkList.SeasonTicketAvailable == ''">是否有提供季票服務 為必填</div>
-            <div class="d-flex">
+            <div class="mb-3 d-flex flex-column">
                 <label>
-                    <input class="me-1" type="radio" value="1" v-model="CarParkList.SeasonTicketAvailable" /> 是
-                </label>
-                <label class="ms-1">
-                    <input class="me-1" type="radio" value="0" v-model="CarParkList.SeasonTicketAvailable" /> 否(預設)
-                </label>
-            </div>
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label>
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                是否有提供預約停車
-                <span class="text-danger">*</span>
-            </label>
-            <div id="ReservationAvailableHelp" class="form-text">
-                <p>
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
                     是否有提供預約停車
-                </p>
+                    <span class="text-danger">*</span>
+                </label>
+                <div id="ReservationAvailableHelp" class="form-text">
+                    <p>
+                        是否有提供預約停車
+                    </p>
+                </div>
+                <div class="text-danger" v-if="CarParkList.ReservationAvailable == ''">是否有提供預約停車 為必填</div>
+                <div class="d-flex">
+                    <label>
+                        <input class="me-1" type="radio" value="1" v-model="CarParkList.ReservationAvailable" /> 是
+                    </label>
+                    <label class="ms-1">
+                        <input class="me-1" type="radio" value="0" v-model="CarParkList.ReservationAvailable" /> 否(預設)
+                    </label>
+                </div>
             </div>
-            <div class="text-danger" v-if="CarParkList.ReservationAvailable == ''">是否有提供預約停車 為必填</div>
-            <div class="d-flex">
+            <div class="mb-3 d-flex flex-column">
                 <label>
-                    <input class="me-1" type="radio" value="1" v-model="CarParkList.ReservationAvailable" /> 是
-                </label>
-                <label class="ms-1">
-                    <input class="me-1" type="radio" value="0" v-model="CarParkList.ReservationAvailable" /> 否(預設)
-                </label>
-            </div>
-
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label>
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                是否有無障礙設施
-                <span class="text-danger">*</span>
-            </label>
-            <div id="WheelchairAccessibleHelp" class="form-text">
-                <p>
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
                     是否有無障礙設施
-                </p>
+                    <span class="text-danger">*</span>
+                </label>
+                <div id="WheelchairAccessibleHelp" class="form-text">
+                    <p>
+                        是否有無障礙設施
+                    </p>
+                </div>
+                <div class="text-danger" v-if="CarParkList.WheelchairAccessible == ''">是否有無障礙設施 為必填</div>
+                <div class="d-flex">
+                    <label>
+                        <input class="me-1" type="radio" value="1" v-model="CarParkList.WheelchairAccessible" /> 是
+                    </label>
+                    <label class="ms-1">
+                        <input class="me-1" type="radio" value="0" v-model="CarParkList.WheelchairAccessible" /> 否(預設)
+                    </label>
+                </div>
             </div>
-            <div class="text-danger" v-if="CarParkList.WheelchairAccessible == ''">是否有無障礙設施 為必填</div>
-            <div class="d-flex">
+            <div class="mb-3 d-flex flex-column">
                 <label>
-                    <input class="me-1" type="radio" value="1" v-model="CarParkList.WheelchairAccessible" /> 是
-                </label>
-                <label class="ms-1">
-                    <input class="me-1" type="radio" value="0" v-model="CarParkList.WheelchairAccessible" /> 否(預設)
-                </label>
-            </div>
-
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label>
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                是否允許停車過夜
-                <span class="text-danger">*</span>
-            </label>
-            <div id="OvernightPermittedHelp" class="form-text">
-                <p>
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
                     是否允許停車過夜
-                </p>
+                    <span class="text-danger">*</span>
+                </label>
+                <div id="OvernightPermittedHelp" class="form-text">
+                    <p>
+                        是否允許停車過夜
+                    </p>
+                </div>
+                <div class="text-danger" v-if="CarParkList.OvernightPermitted == ''">是否允許停車過夜 為必填</div>
+                <div class="d-flex">
+                    <label>
+                        <input class="me-1" type="radio" value="1" v-model="CarParkList.OvernightPermitted" /> 是
+                    </label>
+                    <label class="ms-1">
+                        <input class="me-1" type="radio" value="0" v-model="CarParkList.OvernightPermitted" /> 否(預設)
+                    </label>
+                </div>
             </div>
-            <div class="text-danger" v-if="CarParkList.OvernightPermitted == ''">是否允許停車過夜 為必填</div>
-            <div class="d-flex">
+            <div class="mb-3 d-flex flex-column">
                 <label>
-                    <input class="me-1" type="radio" value="1" v-model="CarParkList.OvernightPermitted" /> 是
-                </label>
-                <label class="ms-1">
-                    <input class="me-1" type="radio" value="0" v-model="CarParkList.OvernightPermitted" /> 否(預設)
-                </label>
-            </div>
-
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label>
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                是否有自動售票機
-                <span class="text-danger">*</span>
-            </label>
-            <div id="TicketMachineHelp" class="form-text">
-                <p>
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
                     是否有自動售票機
-                </p>
+                    <span class="text-danger">*</span>
+                </label>
+                <div id="TicketMachineHelp" class="form-text">
+                    <p>
+                        是否有自動售票機
+                    </p>
+                </div>
+                <div class="text-danger" v-if="CarParkList.TicketMachine == ''">是否有自動售票機 為必填</div>
+                <div class="d-flex">
+                    <label>
+                        <input class="me-1" type="radio" value="1" v-model="CarParkList.TicketMachine" /> 是
+                    </label>
+                    <label class="ms-1">
+                        <input class="me-1" type="radio" value="0" v-model="CarParkList.TicketMachine" /> 否(預設)
+                    </label>
+                </div>
             </div>
-            <div class="text-danger" v-if="CarParkList.TicketMachine == ''">是否有自動售票機 為必填</div>
-            <div class="d-flex">
+            <div class="mb-3 d-flex flex-column">
                 <label>
-                    <input class="me-1" type="radio" value="1" v-model="CarParkList.TicketMachine" /> 是
-                </label>
-                <label class="ms-1">
-                    <input class="me-1" type="radio" value="0" v-model="CarParkList.TicketMachine" /> 否(預設)
-                </label>
-            </div>
-
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label>
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                是否有廁所
-                <span class="text-danger">*</span>
-            </label>
-            <div id="ToiletHelp" class="form-text">
-                <p>
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
                     是否有廁所
-                </p>
+                    <span class="text-danger">*</span>
+                </label>
+                <div id="ToiletHelp" class="form-text">
+                    <p>
+                        是否有廁所
+                    </p>
+                </div>
+                <div class="text-danger" v-if="CarParkList.Toilet == ''">是否有廁所 為必填</div>
+                <div class="d-flex">
+                    <label>
+                        <input class="me-1" type="radio" value="1" v-model="CarParkList.Toilet" /> 是
+                    </label>
+                    <label class="ms-1">
+                        <input class="me-1" type="radio" value="0" v-model="CarParkList.Toilet" /> 否(預設)
+                    </label>
+                </div>
             </div>
-            <div class="text-danger" v-if="CarParkList.Toilet == ''">是否有廁所 為必填</div>
-            <div class="d-flex">
+            <div class="mb-3 d-flex flex-column">
                 <label>
-                    <input class="me-1" type="radio" value="1" v-model="CarParkList.Toilet" /> 是
-                </label>
-                <label class="ms-1">
-                    <input class="me-1" type="radio" value="0" v-model="CarParkList.Toilet" /> 否(預設)
-                </label>
-            </div>
-
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label>
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                是否有餐廳
-                <span class="text-danger">*</span>
-            </label>
-            <div id="RestaurantHelp" class="form-text">
-                <p>
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
                     是否有餐廳
-                </p>
+                    <span class="text-danger">*</span>
+                </label>
+                <div id="RestaurantHelp" class="form-text">
+                    <p>
+                        是否有餐廳
+                    </p>
+                </div>
+                <div class="text-danger" v-if="CarParkList.Restaurant == ''">是否有餐廳 為必填</div>
+                <div class="d-flex">
+                    <label>
+                        <input class="me-1" type="radio" value="1" v-model="CarParkList.Restaurant" /> 是
+                    </label>
+                    <label class="ms-1">
+                        <input class="me-1" type="radio" value="0" v-model="CarParkList.Restaurant" /> 否(預設)
+                    </label>
+                </div>
             </div>
-            <div class="text-danger" v-if="CarParkList.Restaurant == ''">是否有餐廳 為必填</div>
-            <div class="d-flex">
+            <div class="mb-3 d-flex flex-column">
                 <label>
-                    <input class="me-1" type="radio" value="1" v-model="CarParkList.Restaurant" /> 是
-                </label>
-                <label class="ms-1">
-                    <input class="me-1" type="radio" value="0" v-model="CarParkList.Restaurant" /> 否(預設)
-                </label>
-            </div>
-
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label>
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                是否有加油站
-                <span class="text-danger">*</span>
-            </label>
-            <div id="GasStationHelp" class="form-text">
-                <p>
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
                     是否有加油站
-                </p>
+                    <span class="text-danger">*</span>
+                </label>
+                <div id="GasStationHelp" class="form-text">
+                    <p>
+                        是否有加油站
+                    </p>
+                </div>
+                <div class="text-danger" v-if="CarParkList.GasStation == ''">是否有加油站 為必填</div>
+                <div class="d-flex">
+                    <label>
+                        <input class="me-1" type="radio" value="1" v-model="CarParkList.GasStation" /> 是
+                    </label>
+                    <label class="ms-1">
+                        <input class="me-1" type="radio" value="0" v-model="CarParkList.GasStation" /> 否(預設)
+                    </label>
+                </div>
             </div>
-            <div class="text-danger" v-if="CarParkList.GasStation == ''">是否有加油站 為必填</div>
-            <div class="d-flex">
+            <div class="mb-3 d-flex flex-column">
                 <label>
-                    <input class="me-1" type="radio" value="1" v-model="CarParkList.GasStation" /> 是
-                </label>
-                <label class="ms-1">
-                    <input class="me-1" type="radio" value="0" v-model="CarParkList.GasStation" /> 否(預設)
-                </label>
-            </div>
-
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label>
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                是否有商店
-                <span class="text-danger">*</span>
-            </label>
-            <div id="ShopHelp" class="form-text">
-                <p>
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
                     是否有商店
-                </p>
+                    <span class="text-danger">*</span>
+                </label>
+                <div id="ShopHelp" class="form-text">
+                    <p>
+                        是否有商店
+                    </p>
+                </div>
+                <div class="text-danger" v-if="CarParkList.Shop == ''">是否有商店 為必填</div>
+                <div class="d-flex">
+                    <label>
+                        <input class="me-1" type="radio" value="1" v-model="CarParkList.Shop" /> 是
+                    </label>
+                    <label class="ms-1">
+                        <input class="me-1" type="radio" value="0" v-model="CarParkList.Shop" /> 否(預設)
+                    </label>
+                </div>
             </div>
-            <div class="text-danger" v-if="CarParkList.Shop == ''">是否有商店 為必填</div>
-            <div class="d-flex">
+            <div class="mb-3 d-flex flex-column">
                 <label>
-                    <input class="me-1" type="radio" value="1" v-model="CarParkList.Shop" /> 是
-                </label>
-                <label class="ms-1">
-                    <input class="me-1" type="radio" value="0" v-model="CarParkList.Shop" /> 否(預設)
-                </label>
-            </div>
-
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label>
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                是否有閘口
-                <span class="text-danger">*</span>
-            </label>
-            <div id="GatedHelp" class="form-text">
-                <p>
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
                     是否有閘口
-                </p>
+                    <span class="text-danger">*</span>
+                </label>
+                <div id="GatedHelp" class="form-text">
+                    <p>
+                        是否有閘口
+                    </p>
+                </div>
+                <div class="text-danger" v-if="CarParkList.Gated == ''">是否有閘口 為必填</div>
+                <div class="d-flex">
+                    <label>
+                        <input class="me-1" type="radio" value="1" v-model="CarParkList.Gated" /> 是
+                    </label>
+                    <label class="ms-1">
+                        <input class="me-1" type="radio" value="0" v-model="CarParkList.Gated" /> 否(預設)
+                    </label>
+                </div>
             </div>
-            <div class="text-danger" v-if="CarParkList.Gated == ''">是否有閘口 為必填</div>
-            <div class="d-flex">
+            <div class="mb-3 d-flex flex-column">
                 <label>
-                    <input class="me-1" type="radio" value="1" v-model="CarParkList.Gated" /> 是
-                </label>
-                <label class="ms-1">
-                    <input class="me-1" type="radio" value="0" v-model="CarParkList.Gated" /> 否(預設)
-                </label>
-            </div>
-
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label>
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                是否有照明設施
-                <span class="text-danger">*</span>
-            </label>
-            <div id="LightingHelp" class="form-text">
-                <p>
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
                     是否有照明設施
-                </p>
+                    <span class="text-danger">*</span>
+                </label>
+                <div id="LightingHelp" class="form-text">
+                    <p>
+                        是否有照明設施
+                    </p>
+                </div>
+                <div class="text-danger" v-if="CarParkList.Lighting == ''">是否有照明設施 為必填</div>
+                <div class="d-flex">
+                    <label>
+                        <input class="me-1" type="radio" value="1" v-model="CarParkList.Lighting" /> 是
+                    </label>
+                    <label class="ms-1">
+                        <input class="me-1" type="radio" value="0" v-model="CarParkList.Lighting" /> 否(預設)
+                    </label>
+                </div>
             </div>
-            <div class="text-danger" v-if="CarParkList.Lighting == ''">是否有照明設施 為必填</div>
-            <div class="d-flex">
+            <div class="mb-3 d-flex flex-column">
                 <label>
-                    <input class="me-1" type="radio" value="1" v-model="CarParkList.Lighting" /> 是
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
+                    是否停車安全有保障
+                    <span class="text-danger">*</span>
                 </label>
-                <label class="ms-1">
-                    <input class="me-1" type="radio" value="0" v-model="CarParkList.Lighting" /> 否(預設)
-                </label>
+                <div id="SecureParkingHelp" class="form-text">
+                    <p>
+                        是否停車安全有保障<br>
+                        <span>
+                            停車場提供任何強化安全停車之設施或管理作為，<br>
+                            如：進出口柵桿、監視器、保全/管理員...等。
+                        </span>
+                    </p>
+                </div>
+                <div class="text-danger" v-if="CarParkList.SecureParking == ''">是否停車安全有保障 為必填</div>
+                <div class="d-flex">
+                    <label>
+                        <input class="me-1" type="radio" value="1" v-model="CarParkList.SecureParking" /> 是
+                    </label>
+                    <label class="ms-1">
+                        <input class="me-1" type="radio" value="0" v-model="CarParkList.SecureParking" /> 否(預設)
+                    </label>
+                </div>
             </div>
-
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label>
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                是否停車安全有保障
-                <span class="text-danger">*</span>
-            </label>
-            <div id="SecureParkingHelp" class="form-text">
-                <p>
-                    是否停車安全有保障<br>
-                    <span>
-                        停車場提供任何強化安全停車之設施或管理作為，<br>
-                        如：進出口柵桿、監視器、保全/管理員...等。
-                    </span>
-                </p>
-            </div>
-            <div class="text-danger" v-if="CarParkList.SecureParking == ''">是否停車安全有保障 為必填</div>
-            <div class="d-flex">
+            <div class="mb-3 d-flex flex-column">
                 <label>
-                    <input class="me-1" type="radio" value="1" v-model="CarParkList.SecureParking" /> 是
-                </label>
-                <label class="ms-1">
-                    <input class="me-1" type="radio" value="0" v-model="CarParkList.SecureParking" /> 否(預設)
-                </label>
-            </div>
-
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label>
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                是否有售票處
-                <span class="text-danger">*</span>
-            </label>
-            <div id="TicketOfficeHelp" class="form-text">
-                <p>
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
                     是否有售票處
-                </p>
+                    <span class="text-danger">*</span>
+                </label>
+                <div id="TicketOfficeHelp" class="form-text">
+                    <p>
+                        是否有售票處
+                    </p>
+                </div>
+                <div class="text-danger" v-if="CarParkList.TicketOffice == ''">是否有售票處 為必填</div>
+                <div class="d-flex">
+                    <label>
+                        <input class="me-1" type="radio" value="1" v-model="CarParkList.TicketOffice" /> 是
+                    </label>
+                    <label class="ms-1">
+                        <input class="me-1" type="radio" value="0" v-model="CarParkList.TicketOffice" /> 否(預設)
+                    </label>
+                </div>
             </div>
-            <div class="text-danger" v-if="CarParkList.TicketOffice == ''">是否有售票處 為必填</div>
-            <div class="d-flex">
+            <div class="mb-3 d-flex flex-column">
                 <label>
-                    <input class="me-1" type="radio" value="1" v-model="CarParkList.TicketOffice" /> 是
-                </label>
-                <label class="ms-1">
-                    <input class="me-1" type="radio" value="0" v-model="CarParkList.TicketOffice" /> 否(預設)
-                </label>
-            </div>
-
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label>
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                是否允許於停車場區域內裝卸危險物品
-                <span class="text-danger">*</span>
-            </label>
-            <div id="ProhibitedForAnyHazardousMaterialLoadsHelp" class="form-text">
-                <p>
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
                     是否允許於停車場區域內裝卸危險物品
-                </p>
+                    <span class="text-danger">*</span>
+                </label>
+                <div id="ProhibitedForAnyHazardousMaterialLoadsHelp" class="form-text">
+                    <p>
+                        是否允許於停車場區域內裝卸危險物品
+                    </p>
+                </div>
+                <div class="text-danger" v-if="CarParkList.ProhibitedForAnyHazardousMaterialLoads == ''">
+                    是否允許於停車場區域內裝卸危險物品 為必填
+                </div>
+                <div class="d-flex">
+                    <label>
+                        <input class="me-1" type="radio" value="1"
+                            v-model="CarParkList.ProhibitedForAnyHazardousMaterialLoads" /> 是
+                    </label>
+                    <label class="ms-1">
+                        <input class="me-1" type="radio" value="0"
+                            v-model="CarParkList.ProhibitedForAnyHazardousMaterialLoads" /> 否(預設)
+                    </label>
+                </div>
             </div>
-            <div class="text-danger" v-if="CarParkList.ProhibitedForAnyHazardousMaterialLoads == ''">是否允許於停車場區域內裝卸危險物品 為必填
-            </div>
-            <div class="d-flex">
+            <div class="mb-3 d-flex flex-column">
                 <label>
-                    <input class="me-1" type="radio" value="1"
-                        v-model="CarParkList.ProhibitedForAnyHazardousMaterialLoads" /> 是
-                </label>
-                <label class="ms-1">
-                    <input class="me-1" type="radio" value="0"
-                        v-model="CarParkList.ProhibitedForAnyHazardousMaterialLoads" /> 否(預設)
-                </label>
-            </div>
-
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label>
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                是否有管理人員
-                <span class="text-danger">*</span>
-            </label>
-            <div id="SecurityGuardHelp" class="form-text">
-                <p>
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
                     是否有管理人員
-                </p>
+                    <span class="text-danger">*</span>
+                </label>
+                <div id="SecurityGuardHelp" class="form-text">
+                    <p>
+                        是否有管理人員
+                    </p>
+                </div>
+                <div class="text-danger" v-if="CarParkList.SecurityGuard == ''">是否有管理人員 為必填</div>
+                <div class="d-flex">
+                    <label>
+                        <input class="me-1" type="radio" value="1" v-model="CarParkList.SecurityGuard" /> 是
+                    </label>
+                    <label class="ms-1">
+                        <input class="me-1" type="radio" value="0" v-model="CarParkList.SecurityGuard" /> 否(預設)
+                    </label>
+                </div>
             </div>
-            <div class="text-danger" v-if="CarParkList.SecurityGuard == ''">是否有管理人員 為必填</div>
-            <div class="d-flex">
+            <div class="mb-3 d-flex flex-column">
                 <label>
-                    <input class="me-1" type="radio" value="1" v-model="CarParkList.SecurityGuard" /> 是
-                </label>
-                <label class="ms-1">
-                    <input class="me-1" type="radio" value="0" v-model="CarParkList.SecurityGuard" /> 否(預設)
-                </label>
-            </div>
-
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label>
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                是否有監視系統
-                <span class="text-danger">*</span>
-            </label>
-            <div id="SupervisionHelp" class="form-text">
-                <p>
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
                     是否有監視系統
-                </p>
+                    <span class="text-danger">*</span>
+                </label>
+                <div id="SupervisionHelp" class="form-text">
+                    <p>
+                        是否有監視系統
+                    </p>
+                </div>
+                <div class="text-danger" v-if="CarParkList.Supervision == ''">是否有監視系統 為必填</div>
+                <div class="d-flex">
+                    <label>
+                        <input class="me-1" type="radio" value="1" v-model="CarParkList.Supervision" /> 是
+                    </label>
+                    <label class="ms-1">
+                        <input class="me-1" type="radio" value="0" v-model="CarParkList.Supervision" /> 否(預設)
+                    </label>
+                </div>
             </div>
-            <div class="text-danger" v-if="CarParkList.Supervision == ''">是否有監視系統 為必填</div>
-            <div class="d-flex">
+            <div class="mb-3 d-flex flex-column">
                 <label>
-                    <input class="me-1" type="radio" value="1" v-model="CarParkList.Supervision" /> 是
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
+                    監視系統類型 (選填)
                 </label>
-                <label class="ms-1">
-                    <input class="me-1" type="radio" value="0" v-model="CarParkList.Supervision" /> 否(預設)
+                <div id="SupervisionTypeHelp" class="form-text">
+                    <p>
+                        監視系統類型
+                    </p>
+                </div>
+                <div class="d-flex flex-column">
+                    <label>
+                        <input class="me-1" type="radio" value="1" v-model="CarParkList.SupervisionType" />CCTV(預設)
+                    </label>
+                    <label>
+                        <input class="me-1" type="radio" value="2"
+                            v-model="CarParkList.SupervisionType" />CCTV+IVA(Intelligent
+                        Video Analytics 智慧影像分析)
+                    </label>
+                    <label>
+                        <input class="me-1" type="radio" value="254" v-model="CarParkList.SupervisionType" />Other(其他)
+                    </label>
+                    <label>
+                        <input class="me-1" type="radio" value="255" v-model="CarParkList.SupervisionType" />Unknown(未知)
+                    </label>
+                </div>
+            </div>
+            <div class="mb-3 d-flex flex-column">
+                <label for="LandMark" class="form-label">
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
+                    停車場附近的地標/地物 (選填)
                 </label>
+                <div id="LandMarkHelp" class="form-text">
+                    <p>
+                        範例值：新北市政府
+                    </p>
+                </div>
+                <VField name="停車場附近的地標" id="LandMark" v-model="CarParkList.LandMark" type="text" />
+            </div>
+            <div class="mb-3 d-flex flex-column">
+                <label for="BuildingName" class="form-label">
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
+                    停車場所在大樓名稱 (選填)
+                </label>
+                <div id="BuildingNameHelp" class="form-text">
+                    <p>
+                        範例值：板橋大遠百購物中心
+                    </p>
+                </div>
+                <VField name="停車場所在大樓名稱 " id="BuildingName" v-model="CarParkList.BuildingName" type="text" />
+            </div>
+            <div class="mb-3 d-flex flex-column">
+                <label for="City" class="form-label">
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
+                    所在城市
+                    <span class="text-danger">*</span>
+                </label>
+                <select v-model="CarParkList.City" @change="handleCityChange">
+                    <option disabled>請選擇所在城市</option>
+                    <option v-for="item in cities" :key="item.City" :value="item.City">{{ item.City }}</option>
+                </select>
+            </div>
+            <div class="mb-3 d-flex flex-column">
+                <label for="CityCode" class="form-label">
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
+                    所在城市簡碼
+                    <span class="text-danger">*</span>
+                </label>
+                <div id="CityCodeHelp" class="form-text">
+                    <p>
+                        所在城市簡碼請勿自行更改
+                    </p>
+                </div>
+                <select v-model="CarParkList.CityCode">
+                    <option disabled>所在城市簡碼</option>
+                    <option disabled v-for="item in cities" :key="item.City" :value="item.CityCode">{{
+                        item.CityCode }}
+                    </option>
+                </select>
             </div>
 
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label>
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                監視系統類型 (選填)
-            </label>
-            <div id="SupervisionTypeHelp" class="form-text">
-                <p>
-                    監視系統類型
-                </p>
+            <div class="mb-3 d-flex flex-column">
+                <label for="TownName" class="form-label">
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
+                    區鄉鎮名稱
+                    <span class="text-danger">*</span>
+                </label>
+                <select v-model="CarParkList.TownName" @change="handleTownChange">
+                    <option disabled>請選擇區鄉鎮名稱</option>
+                    <option v-for="town in townOptions" :key="town" :value="town">{{ town }}</option>
+                </select>
             </div>
-            <div class="d-flex flex-column">
-                <label>
-                    <input class="me-1" type="radio" value="1" v-model="CarParkList.SupervisionType" />CCTV(預設)
+            <div class="mb-3 d-flex flex-column">
+                <label for="TownID" class="form-label">
+                    <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
+                    區鄉鎮代碼
+                    <span class="text-danger">*</span>
                 </label>
-                <label>
-                    <input class="me-1" type="radio" value="2" v-model="CarParkList.SupervisionType" />CCTV+IVA(Intelligent
-                    Video Analytics 智慧影像分析)
-                </label>
-                <label>
-                    <input class="me-1" type="radio" value="254" v-model="CarParkList.SupervisionType" />Other(其他)
-                </label>
-                <label>
-                    <input class="me-1" type="radio" value="255" v-model="CarParkList.SupervisionType" />Unknown(未知)
-                </label>
+                <div id="TownIDHelp" class="form-text">
+                    <p>
+                        區鄉鎮代碼請勿自行更改
+                    </p>
+                </div>
+                <select v-model="CarParkList.TownID">
+                    <option disabled>請選擇區鄉鎮代碼</option>
+                    <option disabled v-for="town in townOptions" :key="town" :value="townCodes[town]">{{ townCodes[town] }}
+                    </option>
+                </select>
             </div>
 
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label for="LandMark" class="form-label">
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                停車場附近的地標/地物 (選填)
-            </label>
-            <div id="LandMarkHelp" class="form-text">
-                <p>
-                    範例值：新北市政府
-                </p>
-            </div>
-            <VField name="停車場附近的地標" id="LandMark" v-model="CarParkList.LandMark" type="text" />
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label for="BuildingName" class="form-label">
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                停車場所在大樓名稱 (選填)
-            </label>
-            <div id="BuildingNameHelp" class="form-text">
-                <p>
-                    範例值：板橋大遠百購物中心
-                </p>
-            </div>
-            <VField name="停車場所在大樓名稱 " id="BuildingName" v-model="CarParkList.BuildingName" type="text" />
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label for="City" class="form-label">
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                所在城市
-                <span class="text-danger">*</span>
-            </label>
-            <select v-model="CarParkList.City" @change="handleCityChange">
-                <option disabled>請選擇所在城市</option>
-                <option v-for="item in cities" :key="item.City" :value="item.City" selected>{{ item.City }}</option>
-            </select>
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label for="CityCode" class="form-label">
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                所在城市簡碼
-                <span class="text-danger">*</span>
-            </label>
-            <div id="CityCodeHelp" class="form-text">
-                <p>
-                    所在城市簡碼請勿自行更改
-                </p>
-            </div>
-            <select v-model="CarParkList.CityCode">
-                <option disabled>所在城市簡碼</option>
-                <option disabled v-for="item in cities" :key="item.City" :value="item.CityCode" selected>{{ item.CityCode }}
-                </option>
-            </select>
-        </div>
-
-        <div class="mb-3 d-flex flex-column">
-            <label for="TownName" class="form-label">
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                區鄉鎮名稱
-                <span class="text-danger">*</span>
-            </label>
-            <select v-model="CarParkList.TownName" @change="handleTownChange">
-                <option disabled>請選擇區鄉鎮名稱</option>
-                <option v-for="town in townOptions" :key="town" :value="town">{{ town }}</option>
-            </select>
-        </div>
-        <div class="mb-3 d-flex flex-column">
-            <label for="TownID" class="form-label">
-                <img src="../../assets/images/robotic-hand.png" alt="form-icon" class="form-icon">
-                區鄉鎮代碼
-                <span class="text-danger">*</span>
-            </label>
-            <div id="TownIDHelp" class="form-text">
-                <p>
-                    區鄉鎮代碼請勿自行更改
-                </p>
-            </div>
-            <select v-model="CarParkList.TownID">
-                <option disabled>請選擇區鄉鎮代碼</option>
-                <option disabled v-for="town in townOptions" :key="town" :value="townCodes[town]">{{ townCodes[town] }}
-                </option>
-            </select>
-        </div>
-
-        <button class="btn btn-primary" type="submit" :disabled="!meta.valid">
-            儲存
-        </button>
-    </VForm>
+            <button class="btn btn-primary" type="submit" :disabled="!meta.valid" @click="sendCarParkList()">
+                儲存
+            </button>
+        </VForm>
+    </div>
 </template>
 
 <script>
+import { API } from '../../App.vue';
+import '../../../node_modules/bootstrap/dist/js/bootstrap.bundle.js';
+import router from '../../router';
+
 export default {
     data() {
         return {
+            mode: '', // create or edit
+            CarParkID: '', // if this is edit mode, there must have a CarParkId
             CarParkList: {
+                CompanyId: "",
                 CarParkID: "",
                 Zh_tw: "",
                 En: "",
                 OperatorID: "",
                 Description: "",
-                CarParkType: [],
+                CarParkType: "",
                 ParkingGuideType: [],
-                ParkingTypes: [],
-                ParkingSiteTypes: [],
-                ChargeTypes: [],
+                ParkingType: [],
+                ParkingSiteType: [],
+                ChargeType: [],
                 Telephone: "",
                 EmergencyPhone: "",
                 PositionLat: "",
@@ -1028,7 +1044,7 @@ export default {
                 ProhibitedForAnyHazardousMaterialLoads: "0",
                 SecurityGuard: "0",
                 Supervision: "0",
-                SupervisionType: "1",
+                SupervisionType: "",
                 LandMark: "",
                 BuildingName: "",
                 City: "",
@@ -1038,11 +1054,13 @@ export default {
             },
             ParkingAreas: [
                 {
+                    id: "",
                     CompanyId: "",
                     CarParkID: "",
                     ParkingAreaID: "",
-                    ParkingAreaName: "",
-                    ParkingTypes: []
+                    Zh_tw: "",
+                    En: "",
+                    ParkingType: []
                 },
             ],
             hasParkingAreas: null,
@@ -1112,179 +1130,179 @@ export default {
             ],
             ParkingTypes: [
                 {
-                    ParkingType: 1,
+                    ParkingType: "1",
                     typeDesc: "Park-and-Ride 停車轉乘公共運輸"
                 },
                 {
-                    ParkingType: 2,
+                    ParkingType: "2",
                     typeDesc: "Kiss-and-Ride 臨時停車接送"
                 },
                 {
-                    ParkingType: 3,
+                    ParkingType: "3",
                     typeDesc: "Park-And-Cycle 停車後轉使用公共自行車"
                 },
                 {
-                    ParkingType: 4,
+                    ParkingType: "4",
                     typeDesc: "Park-And-Walk 停車後步行"
                 },
                 {
-                    ParkingType: 5,
+                    ParkingType: "5",
                     typeDesc: "Event Parking 活動專用停車場"
                 },
                 {
-                    ParkingType: 6,
+                    ParkingType: "6",
                     typeDesc: "Rest Area 休息站專用停車場"
                 },
                 {
-                    ParkingType: 7,
+                    ParkingType: "7",
                     typeDesc: "Service Area 服務區專用停車場"
                 },
                 {
-                    ParkingType: 8,
+                    ParkingType: "8",
                     typeDesc: "Truck & Large Vehicle Parking 貨車及大型車停車場(當然其他類型車輛也能停)"
                 },
                 {
-                    ParkingType: 9,
+                    ParkingType: "9",
                     typeDesc: "Car Sharing 共享汽車租用服務停車場"
                 },
                 {
-                    ParkingType: 10,
+                    ParkingType: "10",
                     typeDesc: "Lift Sharing 共乘服務停車場"
                 },
                 {
-                    ParkingType: 254,
+                    ParkingType: "254",
                     typeDesc: "Other 其他"
                 },
                 {
-                    ParkingType: 255,
+                    ParkingType: "255",
                     typeDesc: "Unknown 未知"
                 },
             ],
             ParkingSiteTypes: [
                 {
-                    ParkingSiteType: 1,
+                    ParkingSiteType: "1",
                     typeDesc: "Railway Terminal 軌道場站"
                 },
                 {
-                    ParkingSiteType: 2,
+                    ParkingSiteType: "2",
                     typeDesc: "Airport Terminal 機場場站"
                 },
                 {
-                    ParkingSiteType: 3,
+                    ParkingSiteType: "3",
                     typeDesc: "Ferry Terminal 船舶場站"
                 },
                 {
-                    ParkingSiteType: 4,
+                    ParkingSiteType: "4",
                     typeDesc: "Shopping Area 商圈"
                 },
                 {
-                    ParkingSiteType: 5,
+                    ParkingSiteType: "5",
                     typeDesc: "Restaurants 餐廳"
                 },
                 {
-                    ParkingSiteType: 6,
+                    ParkingSiteType: "6",
                     typeDesc: "Stadiums 運動場"
                 },
                 {
-                    ParkingSiteType: 7,
+                    ParkingSiteType: "7",
                     typeDesc: "Hotels 飯店"
                 },
                 {
-                    ParkingSiteType: 8,
+                    ParkingSiteType: "8",
                     typeDesc: "Landmarks and POIs 觀光地標"
                 },
                 {
-                    ParkingSiteType: 9,
+                    ParkingSiteType: "9",
                     typeDesc: "Theaters 電影院"
                 },
                 {
-                    ParkingSiteType: 10,
+                    ParkingSiteType: "10",
                     typeDesc: "Scenic Spots 觀光景點"
                 },
                 {
-                    ParkingSiteType: 11,
+                    ParkingSiteType: "11",
                     typeDesc: "Schools 學校"
                 },
                 {
-                    ParkingSiteType: 12,
+                    ParkingSiteType: "12",
                     typeDesc: "Art Galleries and Museums美術博物館"
                 },
                 {
-                    ParkingSiteType: 13,
+                    ParkingSiteType: "13",
                     typeDesc: "Exhibition Center 展覽中心"
                 },
                 {
-                    ParkingSiteType: 14,
+                    ParkingSiteType: "14",
                     typeDesc: "Convention Center 會議中心"
                 },
                 {
-                    ParkingSiteType: 15,
+                    ParkingSiteType: "15",
                     typeDesc: "Religious Center 宗教機構"
                 },
                 {
-                    ParkingSiteType: 16,
+                    ParkingSiteType: "16",
                     typeDesc: "Retail and Market 賣場"
                 },
                 {
-                    ParkingSiteType: 17,
+                    ParkingSiteType: "17",
                     typeDesc: "Zoo 動物園"
                 },
                 {
-                    ParkingSiteType: 18,
+                    ParkingSiteType: "18",
                     typeDesc: "Freeway 高速公路"
                 },
                 {
-                    ParkingSiteType: 19,
+                    ParkingSiteType: "19",
                     typeDesc: "Government Office 政府部門"
                 },
                 {
-                    ParkingSiteType: 20,
+                    ParkingSiteType: "20",
                     typeDesc: "Residential Area 住宅區"
                 },
                 {
-                    ParkingSiteType: 21,
+                    ParkingSiteType: "21",
                     typeDesc: "NightMarket 夜市"
                 },
                 {
-                    ParkingSiteType: 22,
+                    ParkingSiteType: "22",
                     typeDesc: "Market 市場"
                 },
                 {
-                    ParkingSiteType: 23,
+                    ParkingSiteType: "23",
                     typeDesc: "Park 公園"
                 },
                 {
-                    ParkingSiteType: 254,
+                    ParkingSiteType: "254",
                     typeDesc: "Other 其他"
                 },
                 {
-                    ParkingSiteType: 255,
+                    ParkingSiteType: "255",
                     typeDesc: "Unknown 未知"
                 },
             ],
             ChargeTypes: [
                 {
-                    ChargeType: 1,
+                    ChargeType: "1",
                     typeDesc: "計時"
                 },
                 {
-                    ChargeType: 2,
+                    ChargeType: "2",
                     typeDesc: "計次"
                 },
                 {
-                    ChargeType: 3,
+                    ChargeType: "3",
                     typeDesc: "月租"
                 },
                 {
-                    ChargeType: 4,
+                    ChargeType: "4",
                     typeDesc: "免費"
                 },
                 {
-                    ChargeType: 254,
+                    ChargeType: "254",
                     typeDesc: "其他"
                 },
                 {
-                    ChargeType: 255,
+                    ChargeType: "255",
                     typeDesc: "Unknown 未知"
                 },
             ],
@@ -2175,56 +2193,147 @@ export default {
         }
     },
     methods: {
+        decodeGlobalCompanyId() {
+            // get CompanyId
+            this.CompanyId = this.$store.getters.getGlobalCompanyId;
+            this.CarParkList.CompanyId = this.CompanyId;
+        },
+        checkMode() {
+            this.mode = this.$route.params.mode;
+            if (this.mode == "edit") {
+                this.CarParkID = this.$route.params.CarParkID;
+                this.CarParkList.CarParkID = this.$route.params.CarParkID;
+                this.getCarParkList();
+                this.getParkingAreas();
+            }
+        },
+        getCarParkList() {
+            const getCarParkListAPI = `${API}/main/search/CarParkList`;
+            this.$http
+                .post(getCarParkListAPI, {
+                    "CompanyId": this.CompanyId,
+                    "CarParkID": this.CarParkID
+                })
+                .then((response) => {
+                    this.CarParkList = response.data.data[0];
+                    // Process data into array format
+                    this.CarParkList.ParkingSiteType = response.data.data[0].ParkingSiteType.split(',');
+                    this.CarParkList.ParkingType = response.data.data[0].ParkingType.split(',');
+                    this.CarParkList.ChargeType = response.data.data[0].ChargeType.split(',');
+                    this.handleCityChange();
+                    this.handleTownChange()
+                })
+        },
         sendCarParkList() {
-            console.log(this.CarParkList);
+            if (this.mode === 'create') {
+                const createCarParkListAPI = `${API}/main/create/CarParkList`;
+                this.$http
+                    .post(createCarParkListAPI, this.CarParkList)
+                    .then((response) => {
+                        if (response.data.message == "新增成功") {
+                            alert("路外停車場基本資料 新增成功");
+                            this.$router.push(`/carparks/${this.CarParkList.CarParkID}`);
+                        }
+                    });
+            } else if (this.mode === 'edit') {
+                const updateCarParkListAPI = `${API}/main/update/CarParkList/${this.CarParkList.id}`;
+                this.$http
+                    .post(updateCarParkListAPI, this.CarParkList)
+                    .then((response) => {
+                        if (response.data.message == "修改成功") {
+                            alert('修改路外停車場基本資料 成功');
+                            this.getCarParkList();
+                            router.push(`/carparks/${this.CarParkID}`);
+                        }
+                    });
+            }
+        },
+        getParkingAreas() {
+            const getParkingAreasAPI = `${API}/main/search/ParkingArea`;
+            this.$http
+                .post(getParkingAreasAPI,
+                    {
+                        "CompanyId": this.CompanyId,
+                        "CarParkID": this.CarParkList.CarParkID,
+                    })
+                .then((response) => {
+                    this.ParkingAreas = response.data.data;
+                    if (this.ParkingAreas.length > 0) {
+                        this.hasParkingAreas = "true";
+                        this.ParkingAreas = response.data.data.map(item => {
+                            return {
+                                ...item,
+                                ParkingType: item.ParkingType.split(',').map(type => type.trim()),
+                            };
+                        });
+                    } else {
+                        this.hasParkingAreas = "false";
+                    }
+                });
         },
         addParkingArea() {
             const newArea = {
-                CompanyId: "",
-                CarParkID: "",
+                id: "",
+                CompanyId: this.CompanyId,
+                CarParkID: this.CarParkID,
                 ParkingAreaID: "",
                 ParkingAreaName: "",
-                ParkingTypes: []
+                ParkingType: [],
             };
             this.ParkingAreas.push(newArea);
+            // 找到新增的元素
+            const newElement = this.$refs['parkingArea_' + (this.ParkingAreas.length - 1)];
+
+            // 捲動到新增元素的位置
+            if (newElement) {
+                newElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         },
         removeParkingArea(index) {
-            this.ParkingAreas.splice(index, 1);
+            const removeParkingAreaAPI = `${API}/main/delete/ParkingArea/${this.ParkingAreas[index].id}`;
+            this.$http
+                .post(removeParkingAreaAPI)
+                .then((response) => {
+                    if (response.data.returnCode == 0) {
+                        alert("區域資料 刪除成功");
+                        this.getParkingAreas();
+                    }
+                })
         },
         sendParkingArea(index) {
             this.ParkingAreas[index].CarParkID = this.CarParkList.CarParkID;
-            console.log(this.ParkingAreas[index]);
+            this.ParkingAreas[index].CompanyId = this.CompanyId;
+            // createParkingArea
+            if (this.ParkingAreas[index].id == '') {
+                const createParkingAreaAPI = `${API}/main/create/ParkingArea`;
+                this.$http
+                    .post(createParkingAreaAPI, this.ParkingAreas[index])
+                    .then((response) => {
+                        if (response.data.returnCode === 0) {
+                            alert("區域資料 新增成功");
+                            this.isNewArea = false;
+                            this.getParkingAreas();
+                        }
+                    });
+            } else {
+                // editParkingArea
+                const editParkingAreaAPI = `${API}/main/update/ParkingArea/${this.ParkingAreas[index].id}`;
+                this.$http
+                    .post(editParkingAreaAPI, this.ParkingAreas[index])
+                    .then((response) => {
+                        if (response.data.returnCode === 0) {
+                            alert("區域資料 修改成功");
+                            this.getParkingAreas();
+                        }
+                    });
+            }
         },
         toggleAreaParkingType(ParkingArea, parkingType) {
-            const typeIndex = ParkingArea.ParkingTypes.indexOf(parkingType);
+            const typeIndex = ParkingArea.ParkingType.indexOf(parkingType);
             if (typeIndex === -1) {
-                ParkingArea.ParkingTypes.push(parkingType);
+                ParkingArea.ParkingType.push(parkingType);
             } else {
-                ParkingArea.ParkingTypes.splice(typeIndex, 1);
-            }
-        },
-        toggleParkingType(typeIndex, ParkingType) {
-            const index = this.CarParkList.ParkingTypes.indexOf(ParkingType);
-            if (index != -1) {
-                this.CarParkList.ParkingTypes.splice(index, 1);
-            } else {
-                this.CarParkList.ParkingTypes.push(this.ParkingTypes[typeIndex].ParkingType);
-            }
-        },
-        toggleParkingSiteTypes(typeIndex, ParkingSiteType) {
-            const index = this.CarParkList.ParkingSiteTypes.indexOf(ParkingSiteType);
-            if (index != -1) {
-                this.CarParkList.ParkingSiteTypes.splice(index, 1);
-            } else {
-                this.CarParkList.ParkingSiteTypes.push(this.ParkingSiteTypes[typeIndex].ParkingSiteType);
-            }
-        },
-        toggleChargeTypes(typeIndex, ChargeType) {
-            const index = this.CarParkList.ChargeTypes.indexOf(ChargeType);
-            if (index != -1) {
-                this.CarParkList.ChargeTypes.splice(index, 1);
-            } else {
-                this.CarParkList.ChargeTypes.push(this.ChargeTypes[typeIndex].ChargeType);
+                ParkingArea.ParkingType.splice(typeIndex, 1);
             }
         },
         handleCityChange() {
@@ -2233,13 +2342,15 @@ export default {
                 const City = selectedCity.City
                 this.CarParkList.CityCode = selectedCity.CityCode;
                 this.townOptions = this.towns[City];
-                // 自動選擇第一個區鄉鎮
-                if (this.townOptions.length > 0) {
-                    this.CarParkList.TownName = this.townOptions[0];
-                    this.CarParkList.TownID = this.townCodes[this.townOptions[0]];
-                } else {
-                    this.CarParkList.TownName = '';
-                    this.CarParkList.TownID = '';
+                if (this.mode === 'create') {
+                    // 自動選擇第一個區鄉鎮
+                    if (this.townOptions.length > 0) {
+                        this.CarParkList.TownName = this.townOptions[0];
+                        this.CarParkList.TownID = this.townCodes[this.townOptions[0]];
+                    } else {
+                        this.CarParkList.TownName = '';
+                        this.CarParkList.TownID = '';
+                    }
                 }
             }
         },
@@ -2251,7 +2362,11 @@ export default {
                 this.CarParkList.TownID = '';
             }
         },
-    }
+    },
+    created() {
+        this.decodeGlobalCompanyId();
+        this.checkMode();
+    },
 }
 </script>
 

@@ -1,31 +1,27 @@
 <template>
-  <div class="container d-flex row">
+  <div class="container">
     <NavBar></NavBar>
-    <div class="sideBar col-4">
-      <div class="d-flex align-items-start">
-        <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-          <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home"
-            type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">路外停車場基本資料</button>
-          <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile"
-            type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">路外停車場車位數資料</button>
-          <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages"
-            type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">路外停車場營業時間資料</button>
-        </div>
-      </div>
-    </div>
-    <div class="content col-8">
-      <div class="tab-content" id="v-pills-tabContent">
-        <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
-          <CarParkList></CarParkList>
-        </div>
-        <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
-          <ParkingSpaceList></ParkingSpaceList>
-        </div>
-        <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
-          <ParkingServiceTimeList></ParkingServiceTimeList>
-        </div>
-      </div>
-      <router-view></router-view>
+    <div class="container">
+      <h3 class="text-center">{{ CarParkName }}</h3>
+      <table class="table table-light table-striped text-center">
+        <thead>
+          <tr>
+            <th scope="col">內容</th>
+            <th scope="col">新增 / 編輯</th>
+            <th scope="col">刪除</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in formTypes" :key="item.type">
+            <td>{{ item.form }}</td>
+            <td><button class="btn" 
+              :class="{ 'btn-info': item.hasData, 'btn-outline-info': !item.hasData }" @click="goToForm(item)">
+              {{ item.hasData ? '編輯' : '新增' }}
+            </button></td>
+            <td><button class="btn btn-outline-danger">刪除</button></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
@@ -34,24 +30,82 @@
 import { RouterLink, RouterView } from 'vue-router';
 import router from '../router';
 import NavBar from '../components/NavBar.vue';
-import CarParkList from '../views/CarParks/CarParkList.vue';
-import ParkingSpaceList from '../views/CarParks/ParkingSpaceList.vue';
-import ParkingServiceTimeList from '../views/CarParks/ParkingServiceTimeList.vue';
-
+import { API } from '../App.vue';
 export default {
   data() {
     return {
+      CompanyId: "",
+      CarParkID: "",
+      CarParkName: "",
+      formTypes: [
+        {
+          type: "CarParkList",
+          form: "路外停車場基本資料",
+          hasData: false,
+        },
+        {
+          type: "ParkingSpaceList",
+          form: "路外停車場車位數資料",
+          hasData: false,
+        },
+        {
+          type: "ParkingServiceTimeList",
+          form: "路外停車場營業時間資料",
+          hasData: false,
+        },
+        // {
+        //   type: "ParkingRateList",
+        //   form: "路外停車場費率資料",
+        //   hasData: false,
+        // },
+      ],
     }
   },
   methods: {
+    decodeGlobalCompanyId() {
+      // get CompanyId
+      this.CompanyId = this.$store.getters.getGlobalCompanyId;
+    },
+    getCarParkID() {
+      this.CarParkID = this.$route.params.CarParkID;
+    },
+    async checkPark() {
+      for (const item of this.formTypes) {
+        try {
+          const checkParkAPI = `${API}/main/search/${item.type}`;
+          await this.$http
+            .post(checkParkAPI, {
+              "CompanyId": this.CompanyId,
+              "CarParkID": this.CarParkID
+            })
+            .then((response) => {
+              if (response.data.message == "查詢成功" && response.data.data.length > 0) {
+                item.hasData = true;
+                this.CarParkName = response.data.data[0].Zh_tw;
+              }
+            });
+        } catch (error) {
+          console.error(`Error fetching data for ${item}:`, error);
+        }
+      }
+    },
+    goToForm(item){
+      if (item.hasData == true){
+        router.push(`/${item.type}/edit/${this.CarParkID}`);
+      } else {
+        router.push(`/${item.type}/create/${this.CarParkID}`);
+      };
+    }
+  },
+  mounted() {
+    this.decodeGlobalCompanyId();
+    this.getCarParkID();
+    this.checkPark()
   },
   components: {
     RouterView,
     RouterLink,
     NavBar,
-    CarParkList,
-    ParkingSpaceList,
-    ParkingServiceTimeList
   },
 }
 </script>

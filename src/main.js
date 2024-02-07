@@ -5,7 +5,12 @@ import App from './App.vue';
 import router from './router'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import * as bootstrap from 'bootstrap';
-import store from './store';
+import 'bootstrap/dist/js/bootstrap.bundle.js';
+import axios from 'axios';
+import VueAxios from 'vue-axios';
+
+import store from './store/index.js';
+
 
 // 引入 VeeValidate 元件跟功能
 import { Field, Form, ErrorMessage, defineRule, configure } from 'vee-validate';
@@ -31,6 +36,7 @@ setLocale('zh_TW');
 const app = createApp(App);
 
 app.use(router);
+app.use(VueAxios, axios)
 app.use(store);
 // 掛載 Global 的 VeeValidate 元件
 app.component('VField', Field);
