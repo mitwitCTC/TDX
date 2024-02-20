@@ -1,7 +1,5 @@
 <script>
-import { RouterLink, RouterView } from 'vue-router'
-import store from './store';
-export const API = 'https://8e84-122-116-23-30.ngrok-free.app';
+export const API = 'https://5a20-122-116-23-30.ngrok-free.app';
 export default {
   data() {
     return {

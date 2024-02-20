@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import { RouterLink, RouterView } from 'vue-router';
 import router from '../router';
 import NavBar from '../components/NavBar.vue';
 import { API } from '../App.vue';
@@ -59,7 +58,7 @@ export default {
         //   hasData: false,
         // },
       ],
-    }
+    };
   },
   methods: {
     decodeGlobalCompanyId() {
@@ -75,11 +74,14 @@ export default {
           const checkParkAPI = `${API}/main/search/${item.type}`;
           await this.$http
             .post(checkParkAPI, {
-              "CompanyId": this.CompanyId,
-              "CarParkID": this.CarParkID
+              CompanyId: this.CompanyId,
+              CarParkID: this.CarParkID,
             })
             .then((response) => {
-              if (response.data.message == "查詢成功" && response.data.data.length > 0) {
+              if (
+                response.data.message == "查詢成功" &&
+                response.data.data.length > 0
+              ) {
                 item.hasData = true;
                 this.CarParkName = response.data.data[0].Zh_tw;
               }
@@ -89,25 +91,23 @@ export default {
         }
       }
     },
-    goToForm(item){
-      if (item.hasData == true){
+    goToForm(item) {
+      if (item.hasData == true) {
         router.push(`/${item.type}/edit/${this.CarParkID}`);
       } else {
         router.push(`/${item.type}/create/${this.CarParkID}`);
-      };
-    }
+      }
+    },
   },
   mounted() {
     this.decodeGlobalCompanyId();
     this.getCarParkID();
-    this.checkPark()
+    this.checkPark();
   },
   components: {
-    RouterView,
-    RouterLink,
     NavBar,
   },
-}
+};
 </script>
 
 <style></style>
