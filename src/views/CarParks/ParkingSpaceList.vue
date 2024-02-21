@@ -377,7 +377,7 @@
       </div>
       <!-- ParkingAreas end -->
 
-      <button class="btn btn-primary" type="submit" :disabled="!meta.valid">
+      <button class="btn btn-primary my-2" type="submit" :disabled="!meta.valid">
         儲存
       </button>
     </VForm>
