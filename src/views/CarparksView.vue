@@ -14,11 +14,31 @@
         <tbody>
           <tr v-for="item in formTypes" :key="item.type">
             <td>{{ item.form }}</td>
-            <td><button class="btn" 
-              :class="{ 'btn-info': item.hasData, 'btn-outline-info': !item.hasData }" @click="goToForm(item)">
-              {{ item.hasData ? '編輯' : '新增' }}
-            </button></td>
-            <td><button class="btn btn-outline-danger">刪除</button></td>
+            <td v-if="!isLoading">
+              <button
+                class="btn"
+                :disabled="isLoading"
+                :class="{
+                  'btn-info': item.hasData,
+                  'btn-outline-info': !item.hasData,
+                }"
+                @click="goToForm(item)"
+              >
+                {{ item.hasData ? "編輯" : "新增" }}
+              </button>
+            </td>
+            <td v-else>
+              <button class="btn btn-info" type="button" disabled>
+                <span class="spinner-border spinner-border-sm" role="status">
+                </span>
+                Loading...
+              </button>
+            </td>
+            <td>
+              <button :disabled="!item.hasData" class="btn btn-outline-danger">
+                刪除
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -33,6 +53,7 @@ import { API } from '../App.vue';
 export default {
   data() {
     return {
+      isLoading: false,
       CompanyId: "",
       CarParkID: "",
       CarParkName: "",
@@ -69,6 +90,7 @@ export default {
       this.CarParkID = this.$route.params.CarParkID;
     },
     async checkPark() {
+      this.isLoading = true;
       for (const item of this.formTypes) {
         try {
           const checkParkAPI = `${API}/main/search/${item.type}`;
@@ -84,6 +106,7 @@ export default {
               ) {
                 item.hasData = true;
                 this.CarParkName = response.data.data[0].Zh_tw;
+                this.isLoading = false;
               }
             });
         } catch (error) {
