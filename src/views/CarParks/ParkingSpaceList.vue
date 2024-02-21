@@ -394,6 +394,7 @@ export default {
       CarParkID: "",
       mode: "",
       ParkingSpace: {
+        CityCode: "",
         CarParkID: "",
         Zh_tw: "",
         En: "",
@@ -599,6 +600,7 @@ export default {
         .then((response) => {
           this.ParkingSpace.Zh_tw = response.data.data[0].Zh_tw;
           this.ParkingSpace.En = response.data.data[0].En;
+          this.ParkingSpace.CityCode = response.data.data[0].CityCode;
         });
     },
     getParkingSpaceList() {
