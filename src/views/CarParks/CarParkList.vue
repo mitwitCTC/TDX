@@ -2525,9 +2525,9 @@ export default {
         this.$http
           .post(createCarParkListAPI, this.CarParkList)
           .then((response) => {
-            if (response.data.message == "新增成功") {
+            if (response.data.returnCode == 0) {
               alert("路外停車場基本資料 新增成功");
-              this.$router.push(`/carparks/${this.CarParkList.CarParkID}`);
+              router.push(`/carparks/${this.CarParkList.CarParkID}`);
             }
           });
       } else if (this.mode === "edit") {
